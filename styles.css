@@ -242,3 +242,11 @@ body:before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;bac
 .member-profile-badge{display:flex;flex-direction:column;align-self:flex-start;gap:4px;margin-top:9px;padding:10px 12px;border:1px solid rgba(243,249,170,.7);border-radius:11px;background:rgba(35,34,35,.68);backdrop-filter:blur(9px);box-shadow:0 0 18px rgba(151,164,255,.25);color:#f9f2f9}
 .member-profile-badge-label{color:#f3f9aa;font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
 .member-profile-badge strong{font:600 13px/1.2 'Space Grotesk';overflow-wrap:anywhere}
+
+/* Only the two requested officer cards open the member profile modal. */
+.member-card{cursor:default}
+.member-card.profile-enabled{cursor:pointer}
+
+/* Reveal the welcome message only after the splash has finished. */
+.welcome-backdrop{animation:none;opacity:0;visibility:hidden;pointer-events:none}
+.welcome-backdrop.is-visible{opacity:1;visibility:visible;pointer-events:auto}
