@@ -122,20 +122,24 @@
     if (!welcomeState || !welcomeBackdrop) return;
     welcomeState.checked = true;
     welcomeBackdrop.setAttribute('aria-hidden', 'true');
+    welcomeBackdrop.classList.remove('is-visible');
   }
 
   function openWelcome() {
     if (!welcomeState || !welcomeBackdrop) return;
     welcomeState.checked = false;
     welcomeBackdrop.removeAttribute('aria-hidden');
+    welcomeBackdrop.classList.add('is-visible');
     $('.welcome-actions .button', welcomeBackdrop)?.focus();
   }
 
   welcomeState?.addEventListener('change', () => {
     if (welcomeState.checked) {
       welcomeBackdrop?.setAttribute('aria-hidden', 'true');
+      welcomeBackdrop?.classList.remove('is-visible');
     } else {
       welcomeBackdrop?.removeAttribute('aria-hidden');
+      welcomeBackdrop?.classList.add('is-visible');
     }
   });
 
@@ -150,18 +154,19 @@
   const profileTitle = $('#memberProfileTitle');
   const profileBadge = $('#memberProfileBadge');
   const profileSocials = $('#memberProfileSocials');
+  const profileNoSocials = $('#memberProfileNoSocials');
+  // Every roster card opens a profile; cards with no social link simply show the member details.
   const profileCards = $$('.member-card');
   let profileTrigger = null;
   let previousBodyOverflow = '';
 
-  const t = (key, values) => window.miniappI18n?.t(key, values) ?? key;
-
   function prepareProfileCards() {
     profileCards.forEach((card) => {
-      const name = $('.member-info h3', card)?.textContent.trim() || t('members.member');
+      const name = $('.member-info h3', card)?.textContent.trim() || '';
+      card.classList.add('profile-enabled');
       card.tabIndex = 0;
       card.setAttribute('role', 'button');
-      card.setAttribute('aria-label', t('members.openProfile', { name }));
+      card.setAttribute('aria-label', name);
     });
   }
 
@@ -169,8 +174,8 @@
     if (!profileModal || !profileImage || !profileTitle || !profileBadge || !profileSocials) return;
 
     const image = $('.member-portrait img', card);
-    const name = $('.member-info h3', card)?.textContent.trim() || t('members.member');
-    const role = $('.member-info p', card)?.textContent.trim() || t('members.member');
+    const name = $('.member-info h3', card)?.textContent.trim() || '';
+    const role = $('.member-info p', card)?.textContent.trim() || '';
 
     profileTrigger = card;
     if (image?.src) {
@@ -187,10 +192,11 @@
 
     const links = $$('.member-link', card);
     if (!links.length) {
-      const empty = document.createElement('p');
-      empty.className = 'profile-social-empty';
-      empty.textContent = t('members.noSocials');
-      profileSocials.append(empty);
+      const empty = profileNoSocials?.cloneNode(true);
+      if (empty) {
+        empty.hidden = false;
+        profileSocials.append(empty);
+      }
     } else {
       links.forEach((link) => {
         const profileLink = link.cloneNode(true);
@@ -247,8 +253,8 @@
     if (!lightbox || !lightboxImage || !lightboxLabel || !lightboxTitle) return;
 
     const image = $('.gallery-image', card);
-    const label = $('.gallery-label', card)?.textContent.trim() || t('gallery.postLabel');
-    const title = $('strong, h3', card)?.textContent.trim() || t('gallery.postLabel');
+    const label = $('.gallery-label', card)?.textContent.trim() || '';
+    const title = $('strong, h3', card)?.textContent.trim() || '';
 
     galleryTrigger = card;
     lightboxLabel.textContent = label;
@@ -278,10 +284,10 @@
   }
 
   galleryCards.forEach((card) => {
-    const title = $('strong, h3', card)?.textContent.trim() || t('gallery.postLabel');
+    const title = $('strong, h3', card)?.textContent.trim() || '';
     card.tabIndex = 0;
     card.setAttribute('role', 'button');
-    card.setAttribute('aria-label', t('gallery.openPost', { title }));
+    card.setAttribute('aria-label', title);
     card.addEventListener('click', () => openGalleryPost(card));
     card.addEventListener('keydown', (event) => {
       if (event.key !== 'Enter' && event.key !== ' ') return;
@@ -314,7 +320,8 @@
 
   window.setTimeout(() => {
     if (!welcomeState?.checked) {
+      welcomeBackdrop?.classList.add('is-visible');
       $('.welcome-actions .button', welcomeBackdrop)?.focus();
     }
-  }, 3400);
+  }, 3700);
 })();
