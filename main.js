@@ -155,7 +155,8 @@
       const displayName = $('.member-info h3', card)?.textContent.trim().split('|')[0].trim();
       if (!displayName) return;
 
-      const fileName = `${displayName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.png`;
+      const fileBase = displayName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      const fileName = ['maoni', 'dyaren'].includes(fileBase) ? `${fileBase}.jpg` : `${fileBase}.png`;
       const remoteSource = image.src;
       image.dataset.remoteSource = remoteSource;
       image.dataset.imageFallbackStage = '0';
