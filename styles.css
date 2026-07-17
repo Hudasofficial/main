@@ -279,14 +279,14 @@ body:before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;bac
 }
 
 /* Arrange community posters as compact 2in × 4in portrait cards. */
-.community-gallery-grid{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fit,minmax(192px,1fr));gap:15px;align-items:start;justify-items:center;width:100%;}
+.community-gallery-grid{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fit,minmax(192px,1fr));gap:2px;align-items:start;justify-items:center;width:100%;}
 .community-gallery-grid .gallery-community-post{grid-column:auto;grid-row:auto;width:2in;height:4in;min-height:4in;justify-self:center;padding:15px;border-radius:12px;}
 .community-gallery-grid .gallery-community-post .gallery-image{object-position:center center;}
 .community-gallery-grid .gallery-community-post .gallery-label{margin-bottom:6px;font-size:8px;}
 .community-gallery-grid .gallery-community-post strong{max-width:100%;font-size:20px;line-height:1.04;}
 .community-gallery-grid .gallery-community-post .gallery-post-message{max-width:100%;font-size:10px;line-height:1.28;-webkit-line-clamp:4;}
 @media (max-width:420px){
-  .community-gallery-grid{gap:12px;}
+  .community-gallery-grid{gap:2px;}
   .community-gallery-grid .gallery-community-post{width:192px;height:384px;min-height:384px;}
 }
 
@@ -298,4 +298,48 @@ body:before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;bac
   .member-grid-officers{grid-template-columns:repeat(auto-fit,minmax(2.5in,2.5in));gap:12px;}
   .member-grid-officers .member-card{width:2.5in;height:4in;min-height:4in;}
   .member-grid-officers .member-portrait{height:4in;}
+}
+
+/* Prevent the lower gallery cards and rules stamp from colliding on narrow screens. */
+@media (max-width:570px){
+  .gallery-grid{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+  }
+  .gallery-grid > .gallery-card,
+  .gallery-grid > .community-gallery-grid{
+    flex:0 0 auto;
+    width:100%;
+  }
+  .gallery-grid > .gallery-card.gallery-wide{
+    min-height:300px;
+  }
+  .gallery-grid > .gallery-card.gallery-tall,
+  .gallery-grid > .gallery-card.gallery-small{
+    grid-row:auto;
+    min-height:170px;
+    height:auto;
+  }
+  .community-gallery-grid{
+    height:auto;
+    align-content:start;
+  }
+  .rules-layout{
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+    gap:35px;
+  }
+  .rules-layout > div:first-child{
+    display:flex;
+    justify-content:center;
+  }
+  .rules-stamp{
+    flex:0 0 150px;
+    margin:0 auto;
+  }
+  .rules-layout > div:last-child{
+    min-width:0;
+  }
 }
