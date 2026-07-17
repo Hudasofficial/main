@@ -148,7 +148,7 @@
   });
 
   // Use a predictable local image name for every roster profile.
-  // Example: "Dylan|HUDAS|~*" becomes images/dylan.jpg.
+  // Example: "Dylan|HUDAS|~*" becomes images/dylan.png.
   function useLocalRosterImages() {
     $$('.member-card .member-portrait img').forEach((image) => {
       const card = image.closest('.member-card');
@@ -156,7 +156,12 @@
       if (!displayName) return;
 
       const fileBase = displayName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-      const fileName = ['maoni', 'dyaren'].includes(fileBase) ? `${fileBase}.jpg` : `${fileBase}.png`;
+      const localPortraits = {
+        maoni: 'maoni.jpg',
+        dyaren: 'dyaren.jpg',
+        angee: 'newmem1.jpg',
+      };
+      const fileName = localPortraits[fileBase] || `${fileBase}.png`;
       const remoteSource = image.src;
       image.dataset.remoteSource = remoteSource;
       image.dataset.imageFallbackStage = '0';
@@ -275,8 +280,18 @@
   const lightboxImage = $('#lightboxImage');
   const lightboxLabel = $('#lightboxLabel');
   const lightboxTitle = $('#lightboxTitle');
+  const lightboxCopy = $('#lightboxCopy');
   const galleryCards = $$('.gallery-card, .photo-post');
   let galleryTrigger = null;
+
+  // Keep the requested post usable if the supplied .jgp filename is corrected to .jpg.
+  $$('.gallery-welcome-post .gallery-image').forEach((image) => {
+    image.addEventListener('error', () => {
+      if (image.dataset.jpgFallbackTried) return;
+      image.dataset.jpgFallbackTried = 'true';
+      image.src = 'images/newmem2.jpg';
+    });
+  });
 
   function openGalleryPost(card) {
     if (!lightbox || !lightboxImage || !lightboxLabel || !lightboxTitle) return;
@@ -284,10 +299,12 @@
     const image = $('.gallery-image', card);
     const label = $('.gallery-label', card)?.textContent.trim() || '';
     const title = $('strong, h3', card)?.textContent.trim() || '';
+    const copy = $('.gallery-post-message', card)?.textContent.trim() || 'A snapshot from the HUDAS orbit.';
 
     galleryTrigger = card;
     lightboxLabel.textContent = label;
     lightboxTitle.textContent = title;
+    lightboxCopy.textContent = copy;
     lightboxImage.hidden = !image;
     if (image?.src) {
       lightboxImage.src = image.src;
